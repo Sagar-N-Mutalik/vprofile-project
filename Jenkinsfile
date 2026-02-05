@@ -10,13 +10,6 @@ pipeline {
 	}
 
 	stages {
-
-		// stage('test slack'){
-		// 	steps{
-		// 		sh 'NotARealCommand'
-
-		// 	}
-		// }
 	    stage('Fetch code') {
             steps {
                git branch: 'atom', url: 'https://github.com/Sagar-N-Mutalik/vprofile-project.git'
@@ -68,20 +61,12 @@ pipeline {
             }
         }
 
-        // stage("Quality Gate") {
-        //     steps {
-        //       timeout(time: 1, unit: 'HOURS') {
-        //         waitForQualityGate abortPipeline: true
-        //       }
-        //     }
-        //   }
-
 	     stage("UploadArtifact"){
             steps{
                 nexusArtifactUploader(
                   nexusVersion: 'nexus3',
                   protocol: 'http',
-                  nexusUrl: '172.31.39.227:8081',
+                  nexusUrl: 'NEXUS_SERVER_IP:8081',
                   groupId: 'QA',
                   version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
                   repository: 'vprofile-repo',
