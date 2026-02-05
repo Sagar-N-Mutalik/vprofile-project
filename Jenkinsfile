@@ -11,15 +11,15 @@ pipeline {
 
 	stages {
 
-		stage('test slack'){
-			steps{
-				sh 'NotARealCommand'
+		// stage('test slack'){
+		// 	steps{
+		// 		sh 'NotARealCommand'
 
-			}
-		}
+		// 	}
+		// }
 	    stage('Fetch code') {
             steps {
-               git branch: 'atom', url: 'https://github.com/hkhcoder/vprofile-project.git'
+               git branch: 'atom', url: 'https://github.com/Sagar-N-Mutalik/vprofile-project.git'
             }
 
 	    }
@@ -68,20 +68,20 @@ pipeline {
             }
         }
 
-        stage("Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
+        // stage("Quality Gate") {
+        //     steps {
+        //       timeout(time: 1, unit: 'HOURS') {
+        //         waitForQualityGate abortPipeline: true
+        //       }
+        //     }
+        //   }
 
 	     stage("UploadArtifact"){
             steps{
                 nexusArtifactUploader(
                   nexusVersion: 'nexus3',
                   protocol: 'http',
-                  nexusUrl: '172.31.25.14:8081',
+                  nexusUrl: '172.31.39.227:8081',
                   groupId: 'QA',
                   version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
                   repository: 'vprofile-repo',
@@ -102,7 +102,7 @@ pipeline {
   post {
         always {
             echo 'Slack Notifications.'
-            slackSend channel: '#devopscicd',
+            slackSend channel: '#devops',
                 color: COLOR_MAP[currentBuild.currentResult],
                 message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
         }
